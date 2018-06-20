@@ -1,5 +1,5 @@
 <div class="btn-group">
-    <a id="cla_check_permissions_button" class="btn btn-default btn-sm" href="/cgi-bin/koha/plugins/run.pl?class=[% CLASS %]&method=check_start">
+    <a id="cla_check_permissions_button" class="btn btn-default btn-sm" href="/cgi-bin/koha/plugins/run.pl?class=[% CLASS %]&method=check_start&biblionumber=[% biblionumber %]">
         <i class="fa fa-copyright"></i> CLA Check Permissions
     </a>
 </div>

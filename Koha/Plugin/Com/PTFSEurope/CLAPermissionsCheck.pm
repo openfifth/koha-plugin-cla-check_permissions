@@ -48,6 +48,9 @@ sub get_toolbar_button {
     my $template = $self->get_template({
         file => 'toolbar-button.tt'
     });
+    $template->param(
+        biblionumber => $self->{cgi}->param('biblionumber')
+    );
     return $template->output;
 }
 
