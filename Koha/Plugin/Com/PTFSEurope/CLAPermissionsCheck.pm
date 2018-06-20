@@ -4,6 +4,9 @@ use Modern::Perl;
 
 use base qw(Koha::Plugins::Base);
 
+use Cwd qw(abs_path);
+use CGI;
+
 our $VERSION = "0.0.1";
 
 our $metadata = {
@@ -29,76 +32,46 @@ sub new {
     ## and returns our actual $self
     my $self = $class->SUPER::new($args);
 
+    $self->{cgi} = CGI->new();
+
     return $self;
 }
 
-sub tool {
-    my ( $self, $args ) = @_;
-
-    my $cgi = $self->{'cgi'};
-
-    unless ( $cgi->param('submitted') ) {
-        $self->tool_step1();
-    }
-    else {
-        $self->tool_step2();
-    }
-
-}
-
-sub opac_additional_search {
+sub intranet_catalog_biblio_enhancements {
 	my ($self, $args) = @_;
 
-	return $self->retrieve_data('enable_additional_search') eq 'Yes';
+	return $self->retrieve_data('intranet_catalog_biblio_enhancements') eq 'Yes';
 }
 
-sub configure {
-    my ( $self, $args ) = @_;
-    my $cgi = $self->{'cgi'};
+sub get_toolbar_button {
+    my ($self) = @_;
+    my $template = $self->get_template({
+        file => 'toolbar-button.tt'
+    });
+    return $template->output;
+}
 
-    unless ( $cgi->param('save') ) {
-        my $template = $self->get_template({ file => 'configure.tt' });
+sub get_link {
+    my ($self) = @_;
 
-        ## Grab the values we already have for our settings, if any exist
-        $template->param(
-			# Params here
-        );
-
-        $self->output_html( $template->output() );
-    }
-    else {
-        $self->store_data(
-			# Params here
-        );
-        $self->go_home();
-    }
+    return "Link";
 }
 
 sub install() {
-    my ( $self, $args ) = @_;
-
-    my $table = $self->get_qualified_table_name('mytable');
-
-    return C4::Context->dbh->do( "
-        CREATE TABLE  $table (
-            `borrowernumber` INT( 11 ) NOT NULL
-        ) ENGINE = INNODB;
-    " );
+    return 1;
 }
 
 sub upgrade {
     my ( $self, $args ) = @_;
 
     my $dt = dt_from_string();
-    $self->store_data( { last_upgraded => $dt->ymd('-') . ' ' . $dt->hms(':') } );
+    $self->store_data(
+        { last_upgraded => $dt->ymd('-') . ' ' . $dt->hms(':') }
+    );
 
     return 1;
 }
 
 sub uninstall() {
-    my ( $self, $args ) = @_;
-
-    my $table = $self->get_qualified_table_name('mytable');
-
-    return C4::Context->dbh->do("DROP TABLE $table");
+    return 1;
 }
