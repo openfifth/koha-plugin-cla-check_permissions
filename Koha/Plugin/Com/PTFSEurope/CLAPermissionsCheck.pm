@@ -6,6 +6,8 @@ use base qw(Koha::Plugins::Base);
 
 use Cwd qw(abs_path);
 use CGI;
+use Business::ISBN;
+use Digest::SHA qw( sha256_hex );
 
 our $VERSION = "0.0.1";
 
@@ -60,6 +62,115 @@ sub get_link {
     return "Link";
 }
 
+sub clean_isbn {
+
+	my $str = shift;
+
+	# We may have multiple ISBNs in this string, so attempt to separate
+	# them
+	my @str_arr = split /[\,,\|,\;]/, $str;
+
+	# Clean each resulting string and force it to uppercase (we need an
+	# uppercase X)
+	my @out = ();
+
+	foreach my $isbn(@str_arr) {
+		# Clean unwanted characters
+		$isbn =~ s/[^0-9X]//g;
+		# Force to uppercase
+		$isbn = uc $isbn;
+		# Check whether we've ended up with a valid ISBN
+		# if so, keep it
+		my $isbn_obj = Business::ISBN->new($isbn);
+		my $out = ($isbn_obj->type eq 'ISBN10') ?
+			$isbn_obj->as_isbn10->isbn :
+			$isbn_obj->as_isbn13->isbn;
+		push @out, $out if $isbn_obj && $isbn_obj->is_valid;
+	}
+	return @out;
+}
+
+sub check_start {
+    my ($self, $args) = @_;
+
+    my $template = $self->get_template({
+        file => 'check_start.tt'
+    });
+
+	# The biblio we're working with
+	my $biblionumber = $self->{cgi}->param('biblionumber');
+	my $biblio = Koha::Biblios->find( $biblionumber );
+	$template->param(
+		biblio => $biblio
+	);
+
+	# Find an ISBN or ISSN as required by CLA
+	my $biblioitems = Koha::Biblioitems->search({
+		biblionumber => $biblionumber
+	});
+
+	my @candidates = ();
+	while (my $item = $biblioitems->next) {
+		push(@candidates, clean_isbn($item->isbn));
+	}
+
+	# We didn't find any ISBN or ISSN
+	if (scalar @candidates == 0) {
+		$template->param(
+			errors => ['Unable to find ISBN or ISSN for record']
+		);
+		$self->output_html( $template->output() );
+		exit;
+	}
+
+	# We can't meaningfully evaluate which is the best identifier to
+	# use, so we'll just use the first one we found
+	$template->param(
+		identifier => $candidates[0],
+		identifier_type => 'ISBN'
+	);	
+
+	# Populate the API key
+	$template->param(
+		key => $self->retrieve_data('key')
+	);
+
+	# Populate a hash based on our key and identifier and a timestamp
+	# This will be used as a unique request ID
+	$template->param(
+		hash => sha256_hex(
+			$self->retrieve_data('key') .
+			$candidates[0] .
+			time
+		)
+	);
+
+	$self->output_html( $template->output() );
+}
+
+sub configure {
+    my ( $self, $args ) = @_;
+    my $cgi = $self->{'cgi'};
+
+    unless ( $cgi->param('save') ) {
+        my $template = $self->get_template({ file => 'configure.tt' });
+
+        $template->param(
+            key => $self->retrieve_data('key')
+        );
+
+        $self->output_html( $template->output() );
+    }
+    else {
+        $self->store_data(
+            {
+                key => $cgi->param('key')
+            }
+        );
+        $self->go_home();
+    }
+}
+
 sub install() {
     return 1;
 }
@@ -78,3 +189,5 @@ sub upgrade {
 sub uninstall() {
     return 1;
 }
+
+1;

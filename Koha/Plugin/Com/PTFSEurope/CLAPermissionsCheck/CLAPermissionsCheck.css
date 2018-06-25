@@ -1,0 +1,33 @@
+#cla_header {
+    margin-bottom: 20px;
+}
+
+#cla_check_permissions_id {
+    margin-bottom: 20px;
+}
+
+.cla_yes {
+    color: #080;
+}
+
+.cla_no {
+    color: #800;
+}
+
+#cla_result h1 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+#cla_result h2 {
+    font-size: 1.2em;
+}
+
+#cla_result h2,
+#cla_result h3 {
+    margin-top: 20px;
+}
+
+#cla_configure input {
+    margin: 20px 0;
+}
