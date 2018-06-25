@@ -18,10 +18,6 @@ Confirm that the path to `<pluginsdir>` exists, is correct, and is writable by t
 Restart your webserver
 Once set up is complete you will need to alter your `UseKohaPlugins` system preference. On the Tools page you will see the Tools Plugins and on the Reports page you will see the Reports Plugins.
 
-```
-Give examples
-```
-
 ### Installing
 
 Once your Koha has plugins turned on, as detailed above, installing the plugin is then a case of selecting the "Upload plugin" button on the Plugins page and navigating to the .kpz file you downloaded
