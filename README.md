@@ -22,6 +22,12 @@ Once set up is complete you will need to alter your `UseKohaPlugins` system pref
 
 Once your Koha has plugins turned on, as detailed above, installing the plugin is then a case of selecting the "Upload plugin" button on the Plugins page and navigating to the .kpz file you downloaded
 
+### Usage
+
+Once installed, the plugin can be used by navigating to a biblio in your catalogue, on the "Normal" tab, you will see a "CLA Check Permissions" button:
+
+
+
 ## Authors
 
 * Andrew Isherwood
