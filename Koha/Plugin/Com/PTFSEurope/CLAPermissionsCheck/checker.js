@@ -15,6 +15,15 @@
     return;
   }
 
+  var url =
+    baseUrl +
+    idType.toUpperCase() +
+    '/' +
+    id +
+    '/136?usageTypes=1,2&messageId=' +
+    hash +
+    '&htmlToggle=true';
+
   function tabs(summary) {
     return summary.map(function(item, index) {
       return '<li><a href="#cla_tab_' + index + '">' + item.usageType + '</a>' +
@@ -57,15 +66,6 @@
       '<span class="fa fa-4x fa-border fa-pull-right fa-cross cla_no" title="' + val + '"></span>';
     }
   }
-
-  var url =
-    baseUrl +
-    idType.toUpperCase() +
-    '/' +
-    id +
-    '/136?usageTypes=1,2&messageId=' +
-    hash +
-    '&htmlToggle=true';
 
   $.ajaxSetup({
       headers: {
