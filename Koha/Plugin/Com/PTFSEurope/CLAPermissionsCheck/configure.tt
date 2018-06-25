@@ -16,10 +16,29 @@
         <input type="hidden" name="class" value="[% CLASS %]"/>
         <input type="hidden" name="method" value="[% METHOD %]"/>
 
-        <div>
+        <div id="cla_api_config">
+            <h1>Configure API access:</h1>
 			<label for="bar">API Key: </label>
 			<input type="text" name="key" value="[% key %]" />
 		</div>
+
+        <div id="cla_licences_config">
+            <h1>Select licence:</h1>
+            <ul id="cla_licences_list">
+            [% FOR l IN types.arrayOfLicences %]
+                <li>
+                    <label for="cla_licence_[% l.code %]">
+                        <input type="radio" name="licence" id="cla_licence_[% l.code %]" value="[% l.code %]"
+                        [% IF l.code == licence %]
+                        checked
+                        [% END %]
+                        />
+                        [% l.description %]
+                    </label>
+                </li>
+            [% END %]
+            </ul>
+        </div>
 
         <input type="hidden" name="save" value="1" />
 

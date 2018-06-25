@@ -8,6 +8,9 @@ use Cwd qw(abs_path);
 use CGI;
 use Business::ISBN;
 use Digest::SHA qw( sha256_hex );
+use LWP::UserAgent;
+use HTTP::Request;
+use JSON qw( decode_json );
 
 our $VERSION = "0.0.1";
 
@@ -130,10 +133,12 @@ sub check_start {
 		identifier_type => 'ISBN'
 	);	
 
-	# Populate the API key
+	# Populate the API key & licence
 	$template->param(
-		key => $self->retrieve_data('key')
+		key => $self->retrieve_data('key'),
+        licence => $self->retrieve_data('licence')
 	);
+
 
 	# Populate a hash based on our key and identifier and a timestamp
 	# This will be used as a unique request ID
@@ -153,10 +158,22 @@ sub configure {
     my $cgi = $self->{'cgi'};
 
     unless ( $cgi->param('save') ) {
+
+        my $key = $self->retrieve_data('key');
+        my $licence = $self->retrieve_data('licence');
         my $template = $self->get_template({ file => 'configure.tt' });
 
+        my $ua = LWP::UserAgent->new;
+        my $req = HTTP::Request->new(GET => 'https://api.cla.co.uk/check-permissions/v1/LicenceTypesAndUsages?messageId=' . time);
+        $req->header('Ocp-Apim-Subscription-Key' => $key);
+        my $res = $ua->request($req);
+        if ($res->is_success) {
+            $template->param(types => decode_json($res->content));
+        }
+
         $template->param(
-            key => $self->retrieve_data('key')
+            key => $key,
+            licence => $licence
         );
 
         $self->output_html( $template->output() );
@@ -164,7 +181,8 @@ sub configure {
     else {
         $self->store_data(
             {
-                key => $cgi->param('key')
+                key => $cgi->param('key'),
+                licence => $cgi->param('licence')
             }
         );
         $self->go_home();

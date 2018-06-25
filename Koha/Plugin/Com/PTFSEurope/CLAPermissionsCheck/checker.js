@@ -8,53 +8,51 @@
   var id = dataEl.data('identifier');
   var key = dataEl.data('key');
   var hash = dataEl.data('hash');
-  if (!id || !idType || !key) {
+  var licence = dataEl.data('licence');
+  if (!id || !idType || !key || !licence) {
     dataEl.css('display', 'none');
     $('#cla_loading').css('display', 'none');
     $('#cla_missing_params').css('display', 'block');
     return;
   }
 
-  var url =
-    baseUrl +
-    idType.toUpperCase() +
-    '/' +
-    id +
-    '/136?usageTypes=1,2&messageId=' +
-    hash +
-    '&htmlToggle=true';
+  var url = baseUrl + idType.toUpperCase() + '/' + id + '/' + licence +
+    '?usageTypes=1,2&messageId=' + hash + '&htmlToggle=true';
 
   function tabs(summary) {
     return summary.map(function(item, index) {
-      return '<li><a href="#cla_tab_' + index + '">' + item.usageType + '</a>' +
-      '</li>';
+      if (item.reportType != 'Show Nothing') {
+        return '<li><a href="#cla_tab_' + index + '">' + item.usageType + '</a>' + '</li>';
+      }
     });
   }
 
   function tabsContent(summary) {
     var content = '';
     summary.forEach(function(item, index) {
-      var h = item.header;
-      content += '<div id="cla_tab_' + index + '">';
-      content += getPermitted(item.reportType);
-      content += '<h1>' + h.title + '</h1>';
-      content += '<h2>' + h.introduction + '</h2>';
-      if (item.usageDetails) {
-        content += '<ul class="cla_usage_details">';
-        content += item.usageDetails.map(function(detail) {
-          return '<li>' + detail.title + '</li>';
-        }).join('');
-        content += '</ul>';
+      if (item.reportType != 'Show Nothing') {
+        var h = item.header;
+        content += '<div id="cla_tab_' + index + '">';
+        content += getPermitted(item.reportType);
+        content += '<h1>' + h.title + '</h1>';
+        content += '<h2>' + h.introduction + '</h2>';
+        if (item.usageDetails) {
+          content += '<ul class="cla_usage_details">';
+          content += item.usageDetails.map(function(detail) {
+            return '<li>' + detail.title + '</li>';
+          }).join('');
+          content += '</ul>';
+        }
+        var rest = item.footer.restrictions;
+        var terms = item.footer.terms;
+        content += '<h3>Restrictions</h3>';
+        content += '<p class="cla_restrictions">' + (!!rest ? rest : 'None') + '</p>';
+        content += '<h3>Terms</h3>';
+        content += '<p class="cla_terms">' + (!!terms ? terms : 'None') + '</p>';
+        content += '</div>';
       }
-      var rest = item.footer.restrictions;
-      var terms = item.footer.terms;
-      content += '<h3>Restrictions</h3>';
-      content += '<p class="cla_restrictions">' + (!!rest ? rest : 'None') + '</p>';
-      content += '<h3>Terms</h3>';
-      content += '<p class="cla_terms">' + (!!terms ? terms : 'None') + '</p>';
-      content += '</div>';
     });
-    return content;
+    return content.length > 0 ? content : null;
   }
 
   function getPermitted(val) {

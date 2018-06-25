@@ -28,7 +28,7 @@
 						<p class="alert">[% error %]</p>
 						[% END %]
 					[% ELSE %]
-						<p id="cla_check_permissions_id" data-hash="[% hash %]" data-key="[% key %]" data-identifier_type="[% identifier_type %]" data-identifier="[% identifier %]">Checking permissions on [% identifier_type %] [% identifier %]</p>
+						<p id="cla_check_permissions_id" data-licence="[% licence %]" data-hash="[% hash %]" data-key="[% key %]" data-identifier_type="[% identifier_type %]" data-identifier="[% identifier %]">Checking permissions on [% identifier_type %] [% identifier %]</p>
 						<div id="cla_loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
 					[% END %]
 					<div id="cla_error_message" class="alert" style="display:none"></div>
