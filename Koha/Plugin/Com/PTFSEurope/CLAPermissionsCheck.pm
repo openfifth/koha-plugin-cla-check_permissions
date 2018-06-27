@@ -48,7 +48,7 @@ sub intranet_catalog_biblio_enhancements {
 	return $self->retrieve_data('intranet_catalog_biblio_enhancements') eq 'Yes';
 }
 
-sub get_toolbar_button {
+sub get_intranet_catalog_toolbar_button {
     my ($self) = @_;
     my $template = $self->get_template({
         file => 'toolbar-button.tt'
