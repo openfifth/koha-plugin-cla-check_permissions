@@ -22,23 +22,25 @@
             <input type="text" name="key" value="[% key %]" />
         </div>
 
+    [% IF types.arrayOfLicences  %]
         <div id="cla_licences_config">
             <h1>Select licence:</h1>
             <ul id="cla_licences_list">
             [% FOR l IN types.arrayOfLicences %]
-                <li>
-                    <label for="cla_licence_[% l.code %]">
-                        <input type="radio" name="licence" id="cla_licence_[% l.code %]" value="[% l.code %]"
-                        [% IF l.code == licence %]
-                        checked
-                        [% END %]
-                        />
-                        [% l.description %]
-                    </label>
-                </li>
+            <li>
+                <label for="cla_licence_[% l.code %]">
+                <input type="radio" name="licence" id="cla_licence_[% l.code %]" value="[% l.code %]"
+                [% IF l.code == licence %]
+                checked
+                [% END %]
+                />
+                [% l.description %]
+                </label>
+            </li>
             [% END %]
             </ul>
         </div>
+    [% END %]
 
         <input type="hidden" name="save" value="1" />
 

@@ -12,7 +12,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use JSON qw( decode_json );
 
-our $VERSION = "1.0.1";
+our $VERSION = "1.0.3";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
@@ -179,13 +179,19 @@ sub configure {
         $self->output_html( $template->output() );
     }
     else {
-        $self->store_data(
-            {
-                key => $cgi->param('key'),
-                licence => $cgi->param('licence')
+        my $p = { map { $_ => (scalar $cgi->param($_))[0] } $cgi->param };
+        my $store = {};
+        if (exists $p->{key}) {
+            $store->{key} = $p->{key};
+            if (exists $p->{licence}) {
+                $store->{licence} = $p->{licence};
+                $self->store_data($store);
+                $self->go_home();
             }
-        );
-        $self->go_home();
+            $self->store_data($store);
+        };
+        print $cgi->redirect(-url => '/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Com::PTFSEurope::CLAPermissionsCheck&method=configure');
+        exit;
     }
 }
 
