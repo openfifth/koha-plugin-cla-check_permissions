@@ -43,9 +43,9 @@ sub new {
 }
 
 sub intranet_catalog_biblio_enhancements {
-	my ($self, $args) = @_;
+    my ($self, $args) = @_;
 
-	return $self->retrieve_data('intranet_catalog_biblio_enhancements') eq 'Yes';
+    return $self->retrieve_data('intranet_catalog_biblio_enhancements') eq 'Yes';
 }
 
 sub intranet_catalog_biblio_enhancements_toolbar_button {
@@ -67,30 +67,30 @@ sub get_link {
 
 sub clean_isbn {
 
-	my $str = shift;
+    my $str = shift;
 
-	# We may have multiple ISBNs in this string, so attempt to separate
-	# them
-	my @str_arr = split /[\,,\|,\;]/, $str;
+    # We may have multiple ISBNs in this string, so attempt to separate
+    # them
+    my @str_arr = split /[\,,\|,\;]/, $str;
 
-	# Clean each resulting string and force it to uppercase (we need an
-	# uppercase X)
-	my @out = ();
+    # Clean each resulting string and force it to uppercase (we need an
+    # uppercase X)
+    my @out = ();
 
-	foreach my $isbn(@str_arr) {
-		# Clean unwanted characters
-		$isbn =~ s/[^0-9X]//g;
-		# Force to uppercase
-		$isbn = uc $isbn;
-		# Check whether we've ended up with a valid ISBN
-		# if so, keep it
-		my $isbn_obj = Business::ISBN->new($isbn);
-		my $out = ($isbn_obj->type eq 'ISBN10') ?
-			$isbn_obj->as_isbn10->isbn :
-			$isbn_obj->as_isbn13->isbn;
-		push @out, $out if $isbn_obj && $isbn_obj->is_valid;
-	}
-	return @out;
+    foreach my $isbn(@str_arr) {
+        # Clean unwanted characters
+        $isbn =~ s/[^0-9X]//g;
+        # Force to uppercase
+        $isbn = uc $isbn;
+        # Check whether we've ended up with a valid ISBN
+        # if so, keep it
+        my $isbn_obj = Business::ISBN->new($isbn);
+        my $out = ($isbn_obj->type eq 'ISBN10') ?
+            $isbn_obj->as_isbn10->isbn :
+            $isbn_obj->as_isbn13->isbn;
+        push @out, $out if $isbn_obj && $isbn_obj->is_valid;
+    }
+    return @out;
 }
 
 sub check_start {
@@ -100,57 +100,57 @@ sub check_start {
         file => 'check_start.tt'
     });
 
-	# The biblio we're working with
-	my $biblionumber = $self->{cgi}->param('biblionumber');
-	my $biblio = Koha::Biblios->find( $biblionumber );
-	$template->param(
-		biblio => $biblio
-	);
+    # The biblio we're working with
+    my $biblionumber = $self->{cgi}->param('biblionumber');
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    $template->param(
+        biblio => $biblio
+    );
 
-	# Find an ISBN or ISSN as required by CLA
-	my $biblioitems = Koha::Biblioitems->search({
-		biblionumber => $biblionumber
-	});
+    # Find an ISBN or ISSN as required by CLA
+    my $biblioitems = Koha::Biblioitems->search({
+        biblionumber => $biblionumber
+    });
 
-	my @candidates = ();
-	while (my $item = $biblioitems->next) {
-		push(@candidates, clean_isbn($item->isbn));
-	}
+    my @candidates = ();
+    while (my $item = $biblioitems->next) {
+        push(@candidates, clean_isbn($item->isbn));
+    }
 
-	# We didn't find any ISBN or ISSN
-	if (scalar @candidates == 0) {
-		$template->param(
-			errors => ['Unable to find ISBN or ISSN for record']
-		);
-		$self->output_html( $template->output() );
-		exit;
-	}
+    # We didn't find any ISBN or ISSN
+    if (scalar @candidates == 0) {
+        $template->param(
+            errors => ['Unable to find ISBN or ISSN for record']
+        );
+        $self->output_html( $template->output() );
+        exit;
+    }
 
-	# We can't meaningfully evaluate which is the best identifier to
-	# use, so we'll just use the first one we found
-	$template->param(
-		identifier => $candidates[0],
-		identifier_type => 'ISBN'
-	);	
+    # We can't meaningfully evaluate which is the best identifier to
+    # use, so we'll just use the first one we found
+    $template->param(
+        identifier => $candidates[0],
+        identifier_type => 'ISBN'
+    );    
 
-	# Populate the API key & licence
-	$template->param(
-		key => $self->retrieve_data('key'),
+    # Populate the API key & licence
+    $template->param(
+        key => $self->retrieve_data('key'),
         licence => $self->retrieve_data('licence')
-	);
+    );
 
 
-	# Populate a hash based on our key and identifier and a timestamp
-	# This will be used as a unique request ID
-	$template->param(
-		hash => sha256_hex(
-			$self->retrieve_data('key') .
-			$candidates[0] .
-			time
-		)
-	);
+    # Populate a hash based on our key and identifier and a timestamp
+    # This will be used as a unique request ID
+    $template->param(
+        hash => sha256_hex(
+            $self->retrieve_data('key') .
+            $candidates[0] .
+            time
+        )
+    );
 
-	$self->output_html( $template->output() );
+    $self->output_html( $template->output() );
 }
 
 sub configure {

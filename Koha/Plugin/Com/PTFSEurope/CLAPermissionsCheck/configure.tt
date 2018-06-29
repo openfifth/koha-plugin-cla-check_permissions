@@ -18,9 +18,9 @@
 
         <div id="cla_api_config">
             <h1>Configure API access:</h1>
-			<label for="bar">API Key: </label>
-			<input type="text" name="key" value="[% key %]" />
-		</div>
+            <label for="bar">API Key: </label>
+            <input type="text" name="key" value="[% key %]" />
+        </div>
 
         <div id="cla_licences_config">
             <h1>Select licence:</h1>
