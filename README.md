@@ -1,4 +1,4 @@
-# cla-permissions-check-plugin
+# koha-plugin-cla-check_permissions
 
 This is a plugin for [Koha](https://koha-community.org/) that allows you to make queries to the [CLA Check Permissions service](https://www.cla.co.uk/check-permissions-start) for biblios within your catalogue
 
