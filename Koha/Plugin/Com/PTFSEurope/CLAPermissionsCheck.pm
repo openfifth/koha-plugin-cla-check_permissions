@@ -3,6 +3,7 @@ package Koha::Plugin::Com::PTFSEurope::CLAPermissionsCheck;
 use Modern::Perl;
 
 use base qw(Koha::Plugins::Base);
+use Koha::DateUtils qw( dt_from_string );
 
 use Cwd qw(abs_path);
 use CGI;
