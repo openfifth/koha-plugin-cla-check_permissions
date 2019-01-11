@@ -8,6 +8,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Cwd qw(abs_path);
 use CGI;
 use Business::ISBN;
+use Business::ISSN;
 use Digest::SHA qw( sha256_hex );
 use LWP::UserAgent;
 use HTTP::Request;
@@ -70,6 +71,8 @@ sub clean_isbn {
 
     my $str = shift;
 
+    return () unless $str;
+
     # We may have multiple ISBNs in this string, so attempt to separate
     # them
     my @str_arr = split /[\,,\|,\;]/, $str;
@@ -94,6 +97,27 @@ sub clean_isbn {
     return @out;
 }
 
+sub clean_issn {
+
+    my $str = shift;
+
+    return () unless $str;
+
+    # We may have multiple ISSNs in this string, so attempt to separate
+    # them
+    my @str_arr = split /[\,,\|,\;]/, $str;
+
+    # Check each resulting string and if it looks like a likely
+    # candidate, add it to the return array
+    my @out = ();
+
+    foreach my $issn(@str_arr) {
+        my $issn_obj = Business::ISSN->new($issn);
+        push @out, $issn_obj->as_string if $issn_obj->is_valid;
+    }
+    return @out;
+}
+
 sub check_start {
     my ($self, $args) = @_;
 
@@ -113,13 +137,17 @@ sub check_start {
         biblionumber => $biblionumber
     });
 
-    my @candidates = ();
+    my $candidates = {
+        ISBN => [],
+        ISSN => [] 
+    };
     while (my $item = $biblioitems->next) {
-        push(@candidates, clean_isbn($item->isbn));
+        push(@{$candidates->{ISBN}}, clean_isbn($item->isbn));
+        push(@{$candidates->{ISSN}}, clean_issn($item->issn));
     }
 
     # We didn't find any ISBN or ISSN
-    if (scalar @candidates == 0) {
+    if (scalar @{$candidates->{ISBN}} == 0 && scalar @{$candidates->{ISSN}} == 0) {
         $template->param(
             errors => ['Unable to find ISBN or ISSN for record']
         );
@@ -129,10 +157,22 @@ sub check_start {
 
     # We can't meaningfully evaluate which is the best identifier to
     # use, so we'll just use the first one we found
+    my $to_pass = {};
+    if (scalar @{$candidates->{ISBN}} > 0) {
+        $to_pass = {
+            identifier_type  => 'ISBN',
+            identifier => $candidates->{ISBN}[0]
+        };
+    } else {
+        $to_pass = {
+            identifier_type  => 'ISSN',
+            identifier => $candidates->{ISSN}[0]
+        };
+    }
     $template->param(
-        identifier => $candidates[0],
-        identifier_type => 'ISBN'
-    );    
+        identifier      => $to_pass->{identifier},
+        identifier_type => $to_pass->{identifier_type}
+    );
 
     # Populate the API key & licence
     $template->param(
@@ -146,7 +186,7 @@ sub check_start {
     $template->param(
         hash => sha256_hex(
             $self->retrieve_data('key') .
-            $candidates[0] .
+            $to_pass->{identifier} .
             time
         )
     );
