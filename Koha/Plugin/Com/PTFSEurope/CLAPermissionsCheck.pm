@@ -14,13 +14,13 @@ use LWP::UserAgent;
 use HTTP::Request;
 use JSON qw( decode_json );
 
-our $VERSION = "1.0.4";
+our $VERSION = "1.0.6";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
     author          => 'Andrew Isherwood',
     date_authored   => '2018-06-18',
-    date_updated    => "2018-06-18",
+    date_updated    => "2019-01-11",
     minimum_version => '18.05.00.000',
     maximum_version => undef,
     version         => $VERSION,
