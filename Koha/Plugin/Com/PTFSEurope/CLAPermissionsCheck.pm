@@ -55,7 +55,7 @@ sub intranet_catalog_biblio_enhancements_toolbar_button {
         file => 'toolbar-button.tt'
     });
     $template->param(
-        biblionumber => $self->{cgi}->param('biblionumber')
+        biblionumber => scalar $self->{cgi}->param('biblionumber')
     );
     return $template->output;
 }
