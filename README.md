@@ -4,10 +4,7 @@ This is a plugin for [Koha](https://koha-community.org/) that allows you to make
 
 ## Getting Started
 
-At the time of writing (25th June 2018), the Koha core component of this functionality has been [submitted as a bug](https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20968),
-but not yet merged into the main product. Until such a time as this is done, in order to use this plugin, you will need to apply Bug 20968 to your Koha installation. This can be done via [git bz](https://wiki.koha-community.org/wiki/Git_bz_configuration)
-
-Once the patch is applied, download this plugin by downloading the latest release .kpz file from the [releases page](https://github.com/PTFS-Europe/cla-permissions-check-plugin/releases).
+Download this plugin by downloading the latest release .kpz file from the [releases page](https://github.com/PTFS-Europe/cla-permissions-check-plugin/releases).
 
 The plugin system needs to be turned on by a system administrator.
 
