@@ -14,13 +14,13 @@ use LWP::UserAgent;
 use HTTP::Request;
 use JSON qw( decode_json );
 
-our $VERSION = "1.0.6";
+our $VERSION = "1.0.7";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
     author          => 'Andrew Isherwood',
     date_authored   => '2018-06-18',
-    date_updated    => "2019-01-11",
+    date_updated    => "2019-07-02",
     minimum_version => '18.05.00.000',
     maximum_version => undef,
     version         => $VERSION,
@@ -89,10 +89,12 @@ sub clean_isbn {
         # Check whether we've ended up with a valid ISBN
         # if so, keep it
         my $isbn_obj = Business::ISBN->new($isbn);
-        my $out = ($isbn_obj->type eq 'ISBN10') ?
-            $isbn_obj->as_isbn10->isbn :
-            $isbn_obj->as_isbn13->isbn;
-        push @out, $out if $isbn_obj && $isbn_obj->is_valid;
+        if ($isbn_obj->is_valid) {
+            my $final = ($isbn_obj->type eq 'ISBN10') ?
+                $isbn_obj->as_isbn10->isbn :
+                $isbn_obj->as_isbn13->isbn;
+            push @out, $final;
+        }
     }
     return @out;
 }
