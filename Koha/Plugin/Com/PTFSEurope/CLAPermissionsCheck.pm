@@ -14,7 +14,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use JSON qw( decode_json );
 
-our $VERSION = "1.0.7";
+our $VERSION = "1.0.8";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
@@ -84,6 +84,8 @@ sub clean_isbn {
     foreach my $isbn(@str_arr) {
         # Clean unwanted characters
         $isbn =~ s/[^0-9X]//g;
+        # Only go further if we've got something left
+        next unless $isbn;
         # Force to uppercase
         $isbn = uc $isbn;
         # Check whether we've ended up with a valid ISBN
