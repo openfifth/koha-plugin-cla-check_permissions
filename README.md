@@ -29,6 +29,9 @@ button on the Plugins page and navigating to the .kpz file you downloaded
 
 Once installed, the plugin can be used by navigating to a biblio in your catalogue, on the "Normal" tab, you will see a "CLA Check Permissions" button. This will take you to the CLA Check Permissions page, a request will be made to the API, when the request completes, a modal will be displayed containing the results of the query.
 
+### Notes
+
+It is also possible to integrate Koha and DCS in the opposite direction. The CLA are able to integrate your catalogue into the DCS interface, details of how to do this [can be found here](https://cla.zendesk.com/hc/en-us/articles/360017739773)
 
 
 ## Authors
