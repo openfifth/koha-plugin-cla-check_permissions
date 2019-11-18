@@ -91,7 +91,7 @@ sub clean_isbn {
         # Check whether we've ended up with a valid ISBN
         # if so, keep it
         my $isbn_obj = Business::ISBN->new($isbn);
-        if ($isbn_obj->is_valid) {
+        if ($isbn_obj && $isbn_obj->is_valid) {
             my $final = ($isbn_obj->type eq 'ISBN10') ?
                 $isbn_obj->as_isbn10->isbn :
                 $isbn_obj->as_isbn13->isbn;
