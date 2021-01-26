@@ -33,6 +33,10 @@ Once installed, the plugin can be used by navigating to a biblio in your catalog
 
 It is also possible to integrate Koha and DCS in the opposite direction. The CLA are able to integrate your catalogue into the DCS interface, details of how to do this [can be found here](https://cla.zendesk.com/hc/en-us/articles/360017739773)
 
+Ensure that the users you wish to use the CLA Check Permissions have the entire block of "plugins" related permissions assigned. It is not sufficient to select the individual permissions, the "(plugins) Koha plugins" checkbox must also be selected.
+
+
+
 
 ## Authors
 
