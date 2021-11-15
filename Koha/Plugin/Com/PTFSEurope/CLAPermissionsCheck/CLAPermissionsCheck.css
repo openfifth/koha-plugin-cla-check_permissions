@@ -28,10 +28,6 @@
     margin-top: 20px;
 }
 
-#cla_configure input {
-    margin: 20px 0;
-}
-
 #cla_configure h1 {
     margin-top: 20px;
     font-size: 1.5em;
@@ -43,6 +39,6 @@
 }
 
 #cla_licences_list li {
-    height: 1.5em;
+    height: 2em;
     list-style: none;
 }
