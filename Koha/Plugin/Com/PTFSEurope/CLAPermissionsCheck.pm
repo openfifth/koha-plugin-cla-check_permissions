@@ -14,7 +14,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use JSON qw( decode_json );
 
-our $VERSION = "1.0.9";
+our $VERSION = "1.0.10";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
