@@ -1,6 +1,6 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha: CLA Check Permissions Plugin: Configuration</title>
-<link rel="stylesheet" type="text/css" href="[% PLUGIN_PATH %]/CLAPermissionsCheck.css"></script>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body>
@@ -9,53 +9,72 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; CLA Check Permissions &rsaquo; Configuration</div>
 
-<div id="doc3">
-    <h3>Koha: CLA Check Permissions: Configuration</h3>
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+                <h1>Koha: CLA Check Permissions: Configuration</h1>
 
-    <form id="cla_configure" method="get">
-        <input type="hidden" name="class" value="[% CLASS %]"/>
-        <input type="hidden" name="method" value="[% METHOD %]"/>
+                <div class="page-section bg-info">
+                    <h2>Upgrade status</h2>
+                    [% IF last_upgraded %]
+                        Plugin was last upgraded on this system on [% last_upgraded | $KohaDates with_hours => 1 %]
+                    [% ELSE %]
+                        Plugin has never been upgraded.
+                    [% END %]
+                </div>
 
-        <div id="cla_api_config">
-            <h1>Configure API access:</h1>
-            <label for="bar">API Key: </label>
-            <input type="text" name="key" value="[% key %]" />
-        </div>
+                <form id="cla_configure" method="get">
+                    <input type="hidden" name="class" value="[% CLASS %]"/>
+                    <input type="hidden" name="method" value="[% METHOD %]"/>
 
-    [% IF types.arrayOfLicences  %]
-        <div id="cla_licences_config">
-            <h1>Select licence:</h1>
-            <ul id="cla_licences_list">
-            [% FOR l IN types.arrayOfLicences %]
-            <li>
-                <label for="cla_licence_[% l.code %]">
-                <input type="radio" name="licence" id="cla_licence_[% l.code %]" value="[% l.code %]"
-                [% IF l.code == licence %]
-                checked
+                    <fieldset class="rows">
+                        <legend>Configure API Access</legend>
+                        <ol>
+                            <li>
+
+                        <label for="bar">API Key: </label>
+                        <input type="text" name="key" value="[% key %]" />
+</li>
+</ol>
+</fieldset>
+            
+                [% IF types.arrayOfLicences  %]
+                    <fieldset class="rows" id="cla_licences_config">
+                        <legend>Select licence</legend>
+                        <ol>
+                        [% FOR l IN types.arrayOfLicences %]
+                        <li class="radio">
+                            <label for="cla_licence_[% l.code %]">
+                            <input type="radio" name="licence" id="cla_licence_[% l.code %]" value="[% l.code %]"
+                            [% IF l.code == licence %]
+                            checked
+                            [% END %]
+                            />
+                            [% l.description %]
+                            </label>
+                        </li>
+                        [% END %]
+                        </ol>
+                    </fieldset>
+
                 [% END %]
-                />
-                [% l.description %]
-                </label>
-            </li>
-            [% END %]
-            </ul>
+
+                <fieldset class="action">            
+                    <input type="hidden" name="save" value="1" />
+                    <input type="submit" value="Save configuration" />
+                    <a class="cancel" href="/cgi-bin/koha/plugins/run.pl?class=[% CLASS %]&method=[% METHOD %]">Cancel</a>
+                </fieldset>
+
+                </form>
+            </main>
         </div>
-    [% END %]
 
-        <input type="hidden" name="save" value="1" />
-
-        <input type="submit" value="Save configuration" />
-    </form>
-
-    <hr/>
-
-    <div>
-        <h5>Upgrade status</h5>
-        [% IF last_upgraded %]
-            Plugin was last upgraded on this system on [% last_upgraded | $KohaDates with_hours => 1 %]
-        [% ELSE %]
-            Plugin has never been upgraded.
-        [% END %]
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                <img src="/api/v1/contrib/cla_check_permissions/static/logo.png" />
+            </aside>
+        </div>
     </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
