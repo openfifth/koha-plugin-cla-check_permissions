@@ -1,5 +1,30 @@
+[% IF type %]
 <div class="btn-group">
-    <a id="cla_check_permissions_button" class="btn btn-default btn-sm" href="/cgi-bin/koha/plugins/run.pl?class=[% CLASS %]&method=check_start&biblionumber=[% biblionumber %]">
+    <button type="button" class="btn btn-default btn-sm" id="cla_check_permissions_button" data-toggle="modal" data-target="#checkPermissions" data-type="[% type %]" data-identifier="[% identifier %]" data-licence="[% licence %]">
         <i class="fa fa-copyright"></i> CLA Check Permissions
     </a>
 </div>
+</div>
+<!-- Modal for checkPermissions -->
+<div id="checkPermissions" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="checkPermissionsLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 id="checkPermissionsLabel"> CLA Check Permissions</h2>
+            </div>
+            <div id="cla_result" class="modal-body">
+                <div id="cla_loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+                <div id="cla_tabs" class="toptabs">
+                    <ul id="cla_tabs_list" class="nav nav-tabs" role="tablist"></ul>
+                    <div id="cla_tabs_content" class="tab-content"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+[% END %]

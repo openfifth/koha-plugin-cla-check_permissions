@@ -42,3 +42,11 @@
     height: 2em;
     list-style: none;
 }
+
+#cla_tabs {
+    margin-top: -15px;
+}
+
+#cla_tabs_list {
+    margin-top: -0.2em;
+}

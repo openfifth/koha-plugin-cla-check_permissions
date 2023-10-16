@@ -1,0 +1,62 @@
+{
+    "/proxy/{identifier_type}/{identifier}/{licence}": {
+        "get": {
+            "x-mojo-to": "Com::PTFSEurope::CLAPermissionsCheck::ProxyController#get",
+            "operationId": "CLAProxy",
+            "tags": ["cla_check_permissions"],
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "identifier_type",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "identifier",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "licence",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Proxied response",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                "404": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "An error occured",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "description": "An explanation for the error",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
