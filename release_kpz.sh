@@ -20,7 +20,7 @@ NEW_VERSION=$(node checkVersionNumber.js version)
 
 if [ "$NEW_VERSION" = "No plugin file found" ]; then
     echo -e "${RED}No plugin file could be identified, have you created one?"
-    echo -e "A plugin file must contain "use base qw(Koha::Plugins::Base);"${NC}"
+    echo -e "A plugin file must contain "use base qw\(Koha::Plugins::Base\);"${NC}"
     exit
 elif [ "$NEW_VERSION" = "No version found" ]; then
     echo -e "${RED}No version could be identified, does your plugin file include one?"
