@@ -58,19 +58,22 @@ sub intranet_catalog_biblio_enhancements_toolbar_button {
             file => 'toolbar-button.tt'
         }
     );
-    my $biblionumber    = $self->{cgi}->param('biblionumber');
-    my $biblioitem      = Koha::Biblioitems->search({ biblionumber => $biblionumber} , { rows => 1 } )->single;
+    my $biblionumber = $self->{cgi}->param('biblionumber');
+    my $biblioitem =
+      Koha::Biblioitems->search( { biblionumber => $biblionumber },
+        { rows => 1 } )->single;
 
     if ( my $isbn = $biblioitem->isbn ) {
         my @cleaned = clean_isbn($isbn);
-        if ( @cleaned ) {
-            $template->param( type => 'isbn' );
+        if (@cleaned) {
+            $template->param( type       => 'isbn' );
             $template->param( identifier => $cleaned[0] );
         }
-    } elsif ( my $issn = $biblioitem->issn ) {
+    }
+    elsif ( my $issn = $biblioitem->issn ) {
         my @cleaned = clean_issn($isbn);
-        if ( @cleaned ) {
-            $template->param( type => 'issn' );
+        if (@cleaned) {
+            $template->param( type       => 'issn' );
             $template->param( identifier => $cleaned[0] );
         }
     }
