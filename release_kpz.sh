@@ -31,6 +31,7 @@ else
 fi
 
 PREVIOUS_VERSION=$(git log --pretty=oneline | grep -P -m 1 -o "v[\d|.]{1,6}")
+echo -e "$PREVIOUS_VERSION"
 PREVIOUS_VERSION_NUMBER=${PREVIOUS_VERSION:1}
 
 if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
