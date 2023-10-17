@@ -30,11 +30,11 @@ else
     NEW_VERSION_NUMBER=${NEW_VERSION:1}
 fi
 
-PREVIOUS_VERSION=$(git log -1 --pretty=oneline | grep -E -o "v.{0,4}")
+PREVIOUS_VERSION=$(git log --pretty=oneline | grep -P -m 1 -o "v[\d|.]{1,6}")
 PREVIOUS_VERSION_NUMBER=${PREVIOUS_VERSION:1}
 
 if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
-    echo -e "${GREEN}Version has been updated - checking remotes and starting upload${NC}"
+    echo -e "${GREEN}Version has been updated from $PREVIOUS_VERSION_NUMBER to $NEW_VERSION_NUMBER - checking remotes and starting upload${NC}"
 
     REMOTES=$(git remote -v)
     VALID_REMOTE=$(node checkRemotes.js check $REMOTES)
@@ -56,6 +56,7 @@ if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
 
     git add .
     git commit -m "$NEW_VERSION"
+    git tag "$NEW_VERSION"
     git push $VALID_REMOTE
     echo -e "${GREEN}Plugin has been pushed to Github and a release is being generated${NC}"
 else
