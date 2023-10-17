@@ -30,7 +30,7 @@ else
     NEW_VERSION_NUMBER=${NEW_VERSION:1}
 fi
 
-PREVIOUS_VERSION=$(git log -1 --pretty=oneline | grep -E -o "v.{0,4}")
+PREVIOUS_VERSION=$(git log -1 --pretty=oneline | grep -E -o "v.{0,6}")
 PREVIOUS_VERSION_NUMBER=${PREVIOUS_VERSION:1}
 
 if [ "$NEW_VERSION_NUMBER" != "$PREVIOUS_VERSION_NUMBER" ]; then
