@@ -14,14 +14,14 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Mojo::JSON qw( decode_json );
 
-our $VERSION = "1.0.11";
+our $VERSION = "1.1.0";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
     author          => 'Martin Renvoize',
     date_authored   => '2018-06-18',
-    date_updated    => "2023-10-16",
-    minimum_version => '22.11.00.000',
+    date_updated    => "2025-05-12",
+    minimum_version => '24.11.00.000',
     maximum_version => undef,
     version         => $VERSION,
     description     => 'This plugin provides CLA Check Permissions'
