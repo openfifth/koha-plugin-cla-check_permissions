@@ -1,6 +1,6 @@
 [% IF type %]
 <div class="btn-group">
-    <button type="button" class="btn btn-default btn-sm" id="cla_check_permissions_button" data-toggle="modal" data-target="#checkPermissions" data-type="[% type %]" data-identifier="[% identifier %]" data-licence="[% licence %]">
+    <button type="button" class="btn btn-default btn-sm" id="cla_check_permissions_button" data-bs-toggle="modal" data-bs-target="#checkPermissions" data-type="[% type %]" data-identifier="[% identifier %]" data-licence="[% licence %]">
         <i class="fa fa-copyright"></i> CLA Check Permissions
     </a>
 </div>
@@ -10,7 +10,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="closebtn" data-bs-dismiss="modal" aria-hidden="true">×</button>
                 <h2 id="checkPermissionsLabel"> CLA Check Permissions</h2>
             </div>
             <div id="cla_result" class="modal-body">
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
