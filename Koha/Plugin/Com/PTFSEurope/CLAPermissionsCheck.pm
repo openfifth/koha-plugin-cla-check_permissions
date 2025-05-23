@@ -4,7 +4,6 @@ use Modern::Perl;
 
 use base            qw(Koha::Plugins::Base);
 use Koha::DateUtils qw( dt_from_string );
-use File::Basename qw( dirname );
 
 use Cwd qw(abs_path);
 use CGI;
@@ -53,15 +52,10 @@ sub intranet_catalog_biblio_enhancements {
       'Yes';
 }
 
-sub get_tmpl_dir {
-    return dirname(__FILE__) . "/CLAPermissionsCheck/tmpl";
-}
-
 sub cla_button_tmpl {
     my ($self)        = @_;
     my $template      = $self->get_template( { file => 'tmpl/toolbar-button.tt' } );
 
-    $template->param( tmpl_dir => get_tmpl_dir() );
     $template->param( licence => $self->retrieve_data('licence') );
 
     return $template->output;
@@ -70,8 +64,6 @@ sub cla_button_tmpl {
 sub cla_modal_tmpl {
     my ($self) = @_;
     my $template = $self->get_template( { file => 'tmpl/cla-modal.tt' } );
-
-    $template->param( tmpl_dir => get_tmpl_dir() );
 
     return $template->output;
 }
@@ -83,7 +75,6 @@ sub intranet_catalog_biblio_enhancements_toolbar_button {
             file => 'tmpl/catalog-toolbar-button.tt'
         }
     );
-    $template->param( tmpl_dir => get_tmpl_dir() );
     my $biblionumber = $self->{cgi}->param('biblionumber');
     my $biblioitem =
       Koha::Biblioitems->search( { biblionumber => $biblionumber },

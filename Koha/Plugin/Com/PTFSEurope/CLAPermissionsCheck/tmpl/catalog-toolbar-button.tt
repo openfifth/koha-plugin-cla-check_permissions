@@ -1,5 +1,5 @@
 [% IF type %]
-    [% INCLUDE "${tmpl_dir}/toolbar-button.tt" %]
+    [% INCLUDE "$PLUGIN_DIR/tmpl/toolbar-button.tt" %]
     </div>
-    [% INCLUDE "${tmpl_dir}/cla-modal.tt" %]
+    [% INCLUDE "$PLUGIN_DIR/tmpl/cla-modal.tt" %]
 [% END %]
