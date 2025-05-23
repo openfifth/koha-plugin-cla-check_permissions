@@ -81,7 +81,7 @@
                 if (item.reportType != "Show Nothing") {
                     if (index === 0) {
                         return (
-                            '<li role="presentation" class="active"><a href="#cla_tab_' +
+                            '<li role="presentation" class="nav-item"><a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#cla_tab_' +
                             index +
                             '_panel" id="cla_tab_' +
                             index +
@@ -94,7 +94,7 @@
                         );
                     } else {
                         return (
-                            '<li role="presentation"><a href="#cla_tab_' +
+                            '<li role="presentation" class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#cla_tab_' +
                             index +
                             '_panel" id="cla_tab_' +
                             index +
