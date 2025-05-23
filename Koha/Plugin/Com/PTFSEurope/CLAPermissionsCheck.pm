@@ -15,17 +15,17 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Mojo::JSON qw( decode_json );
 
-our $VERSION = "1.1.0";
+our $VERSION = "2.0.0";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
-    author          => 'Martin Renvoize',
+    author          => 'Open Fifth',
     date_authored   => '2018-06-18',
-    date_updated    => "2025-05-12",
+    date_updated    => "2025-05-23",
     minimum_version => '24.11.00.000',
     maximum_version => undef,
     version         => $VERSION,
-    description     => 'This plugin provides CLA Check Permissions'
+    description     => 'This plugin provides CLA Check Permissions to the catalog detail page and the Standard ILL create form'
 };
 
 sub new {
