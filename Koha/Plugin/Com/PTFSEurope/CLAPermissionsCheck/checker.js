@@ -159,14 +159,14 @@
         function getPermitted(val) {
             if (val == "Permitted") {
                 return (
-                    '<span class="fa fa-4x fa-border fa-pull-right fa-check cla_yes" title="' +
+                    '<span class="text-success fa fa-4x fa-border fa-pull-right fa-check cla_yes" title="' +
                     val +
                     '"></span>'
                 );
             } else if (val == "available") {
                 return "";
             } else {
-                '<span class="fa fa-4x fa-border fa-pull-right fa-cross cla_no" title="' +
+                return '<span class="text-danger fa fa-4x fa-border fa-pull-right fa-ban cla_no" title="' +
                     val +
                     '"></span>';
             }

@@ -245,14 +245,6 @@ sub intranet_js {
     return $script;
 }
 
-sub intranet_head {
-    my ($self) = @_;
-
-    return q{
-        <link rel="stylesheet" type="text/css" href="/api/v1/contrib/cla_check_permissions/static/checker.css">
-    };
-}
-
 sub install() {
     return 1;
 }
