@@ -1,6 +1,9 @@
 (function () {
     $(document).ready(function () {
 
+        /**
+         * ILL Request creation page
+         */
         if (window.location.href.includes("ill-requests.pl") && $("#create_form").length && $('input[name="backend"][value="Standard"]').length) {
             ["issn", "isbn"].forEach(function (id) {
                 if ($("#" + id).length) {
@@ -28,17 +31,20 @@
             }
         }
 
+        /**
+         * Modal for checkPermissions
+         */
         $("#checkPermissions").on("show.bs.modal", function (event) {
-            console.log("Triggered checkPermissions Modal");
-            let modal = $(this);
             let button = $(event.relatedTarget);
-
             let type = button.attr("data-type");
             let identifier = button.attr("data-identifier");
             let licence = button.attr("data-licence");
             checkPermissions(type, identifier, licence);
         });
 
+        /**
+         * Helper functions
+         */
         function checkPermissions(type, identifier, licence) {
             let baseUrl = "/api/v1/contrib/cla_check_permissions/proxy/";
 
