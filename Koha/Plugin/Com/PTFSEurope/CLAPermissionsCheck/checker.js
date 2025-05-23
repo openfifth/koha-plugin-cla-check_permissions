@@ -1,11 +1,30 @@
 (function () {
     $(document).ready(function () {
 
-        if (window.location.href.includes("ill-requests.pl") && $("#create_form").length) {
-            if ($("#issn").length) {
-                $("#issn").change(function () {
-                    console.log(cla_permissions_check_plugin_license);
-                });
+        if (window.location.href.includes("ill-requests.pl") && $("#create_form").length && $('input[name="backend"][value="Standard"]').length) {
+            ["issn", "isbn"].forEach(function (id) {
+                if ($("#" + id).length) {
+                    $('#' + id).after(cla_ill_request_toolbar_button);
+                    if(!$("#" + id).val()){
+                        $("#cla_check_permissions_button").prop("disabled", true);
+                    }else{
+                        updateButtonAttributes(id);
+                    }
+                    $("#" + id).on("keyup change", function () {
+                        if(!$("#" + id).val()){
+                            $("#cla_check_permissions_button").prop("disabled", true);
+                        }else{
+                            $("#cla_check_permissions_button").prop("disabled", false);
+                        }
+                        updateButtonAttributes(id);
+                    });
+                }
+            });
+
+            function updateButtonAttributes(id) {
+                $("#cla_check_permissions_button").attr("data-type", id);
+                $("#cla_check_permissions_button").attr("data-identifier", $("#" + id).val());
+                $("#cla_check_permissions_button").attr("data-licence", cla_permissions_check_plugin_license);
             }
         }
 
@@ -14,9 +33,9 @@
             let modal = $(this);
             let button = $(event.relatedTarget);
 
-            let type = button.data("type");
-            let identifier = button.data("identifier");
-            let licence = button.data("licence");
+            let type = button.attr("data-type");
+            let identifier = button.attr("data-identifier");
+            let licence = button.attr("data-licence");
             checkPermissions(type, identifier, licence);
         });
 
@@ -26,7 +45,16 @@
             let url =
                 baseUrl + type.toUpperCase() + "/" + identifier + "/" + licence;
 
-            $.get(url)
+            $.get({
+                url: url,
+                type: 'GET',
+                beforeSend: function (xhr) {
+                    $("#cla_loading").css("display", "block");
+                    $("#cla_request_complete").css("display", "none");
+                    $("#cla_error_message").css("display", "none");
+                    $("#dataPreview .modal-body, #cla_tabs_list, #cla_tabs_content").empty();
+                }
+            })
                 .done(function (r) {
                     $("#cla_loading").css("display", "none");
                     $("#cla_request_complete").css("display", "block");
@@ -36,7 +64,7 @@
                 })
                 .error(function (e) {
                     $("#cla_error_message")
-                        .text(e.responseJSON.message)
+                        .text(e.responseJSON?.message || e.statusText)
                         .css("display", "block");
                     $("#cla_loading").css("display", "none");
                 });

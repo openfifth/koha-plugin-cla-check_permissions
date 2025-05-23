@@ -7,6 +7,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 use Cwd qw(abs_path);
 use CGI;
+use JSON qw( encode_json );
 use Business::ISBN;
 use Business::ISSN;
 use Digest::SHA qw( sha256_hex );
@@ -49,6 +50,16 @@ sub intranet_catalog_biblio_enhancements {
 
     return $self->retrieve_data('intranet_catalog_biblio_enhancements') eq
       'Yes';
+}
+
+sub ill_request_toolbar_button {
+    my ($self)        = @_;
+    my $template      = $self->get_template( { file => 'toolbar-button.tt' } );
+
+    $template->param( licence => $self->retrieve_data('licence') );
+    $template->param( ill_module => 1 );
+
+    return $template->output;
 }
 
 sub intranet_catalog_biblio_enhancements_toolbar_button {
@@ -220,9 +231,18 @@ sub static_routes {
 
 sub intranet_js {
     my ($self) = @_;
-    return q{
-        <script src="/api/v1/contrib/cla_check_permissions/static/checker.js"></script>
-    };
+
+    my $ill_request_toolbar_button = $self->ill_request_toolbar_button();
+
+    my $script = '<script>';
+    $script .= 'const cla_permissions_check_plugin_license = ' . encode_json( $self->retrieve_data('licence') ) . ';';
+    if( $ill_request_toolbar_button ) {
+        $script .= 'const cla_ill_request_toolbar_button = ' . encode_json($ill_request_toolbar_button) . ';';
+    }
+    $script .= $self->mbf_read('checker.js');
+    $script .= '</script>';
+
+    return $script;
 }
 
 sub intranet_head {
