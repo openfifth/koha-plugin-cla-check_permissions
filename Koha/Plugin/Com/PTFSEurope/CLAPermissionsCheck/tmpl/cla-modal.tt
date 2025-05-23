@@ -1,10 +1,3 @@
-[% IF type || ill_module %]
-<div class="btn-group">
-    <button type="button" class="btn btn-default btn-sm" id="cla_check_permissions_button" data-bs-toggle="modal" data-bs-target="#checkPermissions" data-type="[% type %]" data-identifier="[% identifier %]" data-licence="[% licence %]">
-        <i class="fa fa-copyright"></i> CLA Check Permissions
-    </a>
-</div>
-</div>
 <!-- Modal for checkPermissions -->
 <div id="checkPermissions" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="checkPermissionsLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -27,4 +20,3 @@
     </div>
 </div>
 <div>
-[% END %]

@@ -5,9 +5,10 @@
          * ILL Request creation page
          */
         if (window.location.href.includes("ill-requests.pl") && $("#create_form").length && $('input[name="backend"][value="Standard"]').length) {
+            $('#create_form').after(cla_modal_tmpl);
             ["issn", "isbn"].forEach(function (id) {
                 if ($("#" + id).length) {
-                    $('#' + id).after(cla_ill_request_toolbar_button);
+                    $('#' + id).after(cla_button_tmpl);
                     if(!$("#" + id).val()){
                         $("#cla_check_permissions_button").prop("disabled", true);
                     }else{

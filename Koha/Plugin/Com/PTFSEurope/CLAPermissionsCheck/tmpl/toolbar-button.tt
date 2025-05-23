@@ -1,0 +1,5 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" id="cla_check_permissions_button" data-bs-toggle="modal" data-bs-target="#checkPermissions" data-type="[% type %]" data-identifier="[% identifier %]" data-licence="[% licence %]">
+        <i class="fa fa-copyright"></i> CLA Check Permissions
+    </a>
+</div>

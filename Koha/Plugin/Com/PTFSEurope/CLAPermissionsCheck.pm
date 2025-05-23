@@ -4,6 +4,7 @@ use Modern::Perl;
 
 use base            qw(Koha::Plugins::Base);
 use Koha::DateUtils qw( dt_from_string );
+use File::Basename qw( dirname );
 
 use Cwd qw(abs_path);
 use CGI;
@@ -52,12 +53,25 @@ sub intranet_catalog_biblio_enhancements {
       'Yes';
 }
 
-sub ill_request_toolbar_button {
-    my ($self)        = @_;
-    my $template      = $self->get_template( { file => 'toolbar-button.tt' } );
+sub get_tmpl_dir {
+    return dirname(__FILE__) . "/CLAPermissionsCheck/tmpl";
+}
 
+sub cla_button_tmpl {
+    my ($self)        = @_;
+    my $template      = $self->get_template( { file => 'tmpl/toolbar-button.tt' } );
+
+    $template->param( tmpl_dir => get_tmpl_dir() );
     $template->param( licence => $self->retrieve_data('licence') );
-    $template->param( ill_module => 1 );
+
+    return $template->output;
+}
+
+sub cla_modal_tmpl {
+    my ($self) = @_;
+    my $template = $self->get_template( { file => 'tmpl/cla-modal.tt' } );
+
+    $template->param( tmpl_dir => get_tmpl_dir() );
 
     return $template->output;
 }
@@ -66,9 +80,10 @@ sub intranet_catalog_biblio_enhancements_toolbar_button {
     my ($self) = @_;
     my $template = $self->get_template(
         {
-            file => 'toolbar-button.tt'
+            file => 'tmpl/catalog-toolbar-button.tt'
         }
     );
+    $template->param( tmpl_dir => get_tmpl_dir() );
     my $biblionumber = $self->{cgi}->param('biblionumber');
     my $biblioitem =
       Koha::Biblioitems->search( { biblionumber => $biblionumber },
@@ -232,12 +247,14 @@ sub static_routes {
 sub intranet_js {
     my ($self) = @_;
 
-    my $ill_request_toolbar_button = $self->ill_request_toolbar_button();
+    my $cla_button_tmpl = $self->cla_button_tmpl();
+    my $cla_modal_tmpl  = $self->cla_modal_tmpl();
 
     my $script = '<script>';
     $script .= 'const cla_permissions_check_plugin_license = ' . encode_json( $self->retrieve_data('licence') ) . ';';
-    if( $ill_request_toolbar_button ) {
-        $script .= 'const cla_ill_request_toolbar_button = ' . encode_json($ill_request_toolbar_button) . ';';
+    if( $cla_button_tmpl && $cla_modal_tmpl ) {
+        $script .= 'const cla_modal_tmpl = ' . encode_json($cla_modal_tmpl) . ';';
+        $script .= 'const cla_button_tmpl = ' . encode_json($cla_button_tmpl) . ';';
     }
     $script .= $self->mbf_read('checker.js');
     $script .= '</script>';
