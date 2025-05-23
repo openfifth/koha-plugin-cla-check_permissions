@@ -7,26 +7,29 @@ $(document).ready(function () {
         let type = button.data("type");
         let identifier = button.data("identifier");
         let licence = button.data("licence");
+        checkPermissions(type, identifier, licence);
 
-        let baseUrl = "/api/v1/contrib/cla_check_permissions/proxy/";
+        function checkPermissions(type, identifier, licence) {
+            let baseUrl = "/api/v1/contrib/cla_check_permissions/proxy/";
 
-        let url =
-            baseUrl + type.toUpperCase() + "/" + identifier + "/" + licence;
+            let url =
+                baseUrl + type.toUpperCase() + "/" + identifier + "/" + licence;
 
-        $.get(url)
-            .done(function (r) {
-                $("#cla_loading").css("display", "none");
-                $("#cla_request_complete").css("display", "block");
-                $("#dataPreview .modal-body").html(r.responseJSON);
-                $("#cla_tabs_list").html(tabs(r.usagesSummary));
-                $("#cla_tabs_content").html(tabsContent(r.usagesSummary));
-            })
-            .error(function (e) {
-                $("#cla_error_message")
-                    .text(e.responseJSON.message)
-                    .css("display", "block");
-                $("#cla_loading").css("display", "none");
-            });
+            $.get(url)
+                .done(function (r) {
+                    $("#cla_loading").css("display", "none");
+                    $("#cla_request_complete").css("display", "block");
+                    $("#dataPreview .modal-body").html(r.responseJSON);
+                    $("#cla_tabs_list").html(tabs(r.usagesSummary));
+                    $("#cla_tabs_content").html(tabsContent(r.usagesSummary));
+                })
+                .error(function (e) {
+                    $("#cla_error_message")
+                        .text(e.responseJSON.message)
+                        .css("display", "block");
+                    $("#cla_loading").css("display", "none");
+                });
+        }
 
         function tabs(summary) {
             return summary.map(function (item, index) {
