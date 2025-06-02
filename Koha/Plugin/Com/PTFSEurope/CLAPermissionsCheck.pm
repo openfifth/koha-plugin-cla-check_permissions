@@ -14,6 +14,7 @@ use Digest::SHA qw( sha256_hex );
 use LWP::UserAgent;
 use HTTP::Request;
 use Mojo::JSON qw( decode_json );
+use C4::Templates;
 
 our $VERSION = "2.0.0";
 
@@ -54,7 +55,7 @@ sub intranet_catalog_biblio_enhancements {
 
 sub cla_button_tmpl {
     my ($self)        = @_;
-    my $template      = $self->get_template( { file => 'tmpl/toolbar-button.tt' } );
+    my $template      = C4::Templates::gettemplate( $self->mbf_path('tmpl/toolbar-button.tt'), 'intranet', undef );
 
     $template->param( licence => $self->retrieve_data('licence') );
 
@@ -63,7 +64,7 @@ sub cla_button_tmpl {
 
 sub cla_modal_tmpl {
     my ($self) = @_;
-    my $template = $self->get_template( { file => 'tmpl/cla-modal.tt' } );
+    my $template = C4::Templates::gettemplate( $self->mbf_path('tmpl/cla-modal.tt'), 'intranet', undef );
 
     return $template->output;
 }
