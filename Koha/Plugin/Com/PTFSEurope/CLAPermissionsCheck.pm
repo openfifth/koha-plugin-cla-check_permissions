@@ -16,7 +16,7 @@ use HTTP::Request;
 use Mojo::JSON qw( decode_json );
 use C4::Templates;
 
-our $VERSION = "2.1.0";
+our $VERSION = "2.1.1";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
