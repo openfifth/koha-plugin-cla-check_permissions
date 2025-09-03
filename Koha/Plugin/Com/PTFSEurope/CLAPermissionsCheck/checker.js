@@ -6,30 +6,53 @@
          */
         if (window.location.href.includes("ill-requests.pl") && $("#create_form").length && $('input[name="backend"][value="Standard"]').length) {
             $('#create_form').after(cla_modal_tmpl);
-            ["issn", "isbn"].forEach(function (id) {
-                if ($("#" + id).length) {
-                    $('#' + id).after(cla_button_tmpl);
-                    if(!$("#" + id).val()){
+            addCLAButton(["#issn", "#isbn"], 'after', 1);
+        }
+
+        /**
+         * ILL Request manage page
+         */
+        if (window.location.href.includes("ill-requests.pl") && window.location.href.includes("op=illview") && ( $('.requestmeta-ISSN').length || $('.requestmeta-ISBN').length) ) {
+            $('.page-section').after(cla_modal_tmpl);
+            addCLAButton([".requestmeta-ISSN", ".requestmeta-ISBN"], 'append', 0);
+        }
+
+        function addCLAButton(selectors, add_method, check_input){
+            selectors.forEach(function (selector) {
+                if ($(selector).length) {
+                    $(selector)[add_method](cla_button_tmpl);
+                    if(!$(selector).val() && check_input){
                         $("#cla_check_permissions_button").prop("disabled", true);
                     }else{
-                        updateButtonAttributes(id);
+                        updateButtonAttributes(selector, check_input);
                     }
-                    $("#" + id).on("keyup change", function () {
-                        if(!$("#" + id).val()){
+                    $(selector).on("keyup change", function () {
+                        if(!$(selector).val()){
                             $("#cla_check_permissions_button").prop("disabled", true);
                         }else{
                             $("#cla_check_permissions_button").prop("disabled", false);
                         }
-                        updateButtonAttributes(id);
+                        updateButtonAttributes(selector, 1);
                     });
                 }
             });
+        }
 
-            function updateButtonAttributes(id) {
-                $("#cla_check_permissions_button").attr("data-type", id);
-                $("#cla_check_permissions_button").attr("data-identifier", $("#" + id).val());
-                $("#cla_check_permissions_button").attr("data-licence", cla_permissions_check_plugin_license);
+        function updateButtonAttributes(selector, check_input) {
+            if(check_input){
+                let selector_str = selector.substr(0, 1) === '#' || selector.substr(0, 1) === '.' ? selector.substr(1) : selector;
+                $("#cla_check_permissions_button").attr("data-type", selector_str);
+                $("#cla_check_permissions_button").attr("data-identifier", $(selector).val());
+            } else {
+                if(selector.toLowerCase().includes('issn')){
+                    $("#cla_check_permissions_button").attr("data-type", "ISSN");
+                } else if(selector.toLowerCase().includes('isbn')){
+                    $("#cla_check_permissions_button").attr("data-type", "ISBN");
+                }
+                const identifier = $(selector+' .label')[0].nextSibling.nodeValue.trim();
+                $("#cla_check_permissions_button").attr("data-identifier", identifier);
             }
+            $("#cla_check_permissions_button").attr("data-licence", cla_permissions_check_plugin_license);
         }
 
         /**
