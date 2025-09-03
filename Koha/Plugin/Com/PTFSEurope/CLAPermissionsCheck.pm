@@ -16,17 +16,17 @@ use HTTP::Request;
 use Mojo::JSON qw( decode_json );
 use C4::Templates;
 
-our $VERSION = "2.0.1";
+our $VERSION = "2.1.0";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
     author          => 'Open Fifth',
     date_authored   => '2018-06-18',
-    date_updated    => "2025-06-02",
+    date_updated    => "2025-09-03",
     minimum_version => '24.11.00.000',
     maximum_version => undef,
     version         => $VERSION,
-    description     => 'This plugin provides CLA Check Permissions to the catalog detail page and the Standard ILL create form'
+    description     => 'This plugin provides CLA Check Permissions to the catalog detail page, the Standard ILL create form and the ILL \'Manage request\' page.'
 };
 
 sub new {
