@@ -4,8 +4,8 @@
         /**
          * ILL Request creation page
          */
-        if (window.location.href.includes("ill-requests.pl") && $("#create_form").length && $('input[name="backend"][value="Standard"]').length) {
-            $('#create_form').after(cla_modal_tmpl);
+        if (window.location.href.includes("ill-requests.pl") && ( $("#create_form").length || $("#standard_edit_form").length ) && $('input[name="backend"][value="Standard"]').length) {
+            $('#create_form, #standard_edit_form').after(cla_modal_tmpl);
             addCLAButton(["#issn", "#isbn"], 'after', 1);
         }
 
