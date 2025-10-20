@@ -6,31 +6,32 @@
          */
         if (window.location.href.includes("ill-requests.pl") && ( $("#create_form").length || $("#standard_edit_form").length ) && $('input[name="backend"][value="Standard"]').length) {
             $('#create_form, #standard_edit_form').after(cla_modal_tmpl);
-            addCLAButton(["#issn", "#isbn"], 'after', 1);
+            addCLAButton(["#issn", "#eissn", "#isbn"], 'after', 1);
         }
 
         /**
          * ILL Request manage page
          */
-        if (window.location.href.includes("ill-requests.pl") && window.location.href.includes("op=illview") && ( $('.requestmeta-ISSN').length || $('.requestmeta-ISBN').length) ) {
+        if (window.location.href.includes("ill-requests.pl") && window.location.href.includes("op=illview") && ( $('.requestmeta-ISSN').length  || $('.requestmeta-eISSN').length || $('.requestmeta-ISBN').length) ) {
             $('.page-section').after(cla_modal_tmpl);
-            addCLAButton([".requestmeta-ISSN", ".requestmeta-ISBN"], 'append', 0);
+            addCLAButton([".requestmeta-ISSN", ".requestmeta-eISSN", ".requestmeta-ISBN"], 'append', 0);
         }
 
         function addCLAButton(selectors, add_method, check_input){
             selectors.forEach(function (selector) {
                 if ($(selector).length) {
                     $(selector)[add_method](cla_button_tmpl);
+                    const button = $(selector).closest('li').find('.cla_check_permissions_button');
                     if(!$(selector).val() && check_input){
-                        $("#cla_check_permissions_button").prop("disabled", true);
+                        button.prop("disabled", true);
                     }else{
                         updateButtonAttributes(selector, check_input);
                     }
                     $(selector).on("keyup change", function () {
                         if(!$(selector).val()){
-                            $("#cla_check_permissions_button").prop("disabled", true);
+                            button.prop("disabled", true);
                         }else{
-                            $("#cla_check_permissions_button").prop("disabled", false);
+                            button.prop("disabled", false);
                         }
                         updateButtonAttributes(selector, 1);
                     });
@@ -39,20 +40,23 @@
         }
 
         function updateButtonAttributes(selector, check_input) {
+            const button = $(selector).closest('li').find('.cla_check_permissions_button');
             if(check_input){
                 let selector_str = selector.substr(0, 1) === '#' || selector.substr(0, 1) === '.' ? selector.substr(1) : selector;
-                $("#cla_check_permissions_button").attr("data-type", selector_str);
-                $("#cla_check_permissions_button").attr("data-identifier", $(selector).val());
+                button.attr("data-type", selector_str);
+                button.attr("data-identifier", $(selector).val());
             } else {
                 if(selector.toLowerCase().includes('issn')){
-                    $("#cla_check_permissions_button").attr("data-type", "ISSN");
+                    button.attr("data-type", "ISSN");
+                } else if(selector.toLowerCase().includes('eissn')){
+                    button.attr("data-type", "eISSN");
                 } else if(selector.toLowerCase().includes('isbn')){
-                    $("#cla_check_permissions_button").attr("data-type", "ISBN");
+                    button.attr("data-type", "ISBN");
                 }
                 const identifier = $(selector+' .label')[0].nextSibling.nodeValue.trim();
-                $("#cla_check_permissions_button").attr("data-identifier", identifier);
+                button.attr("data-identifier", identifier);
             }
-            $("#cla_check_permissions_button").attr("data-licence", cla_permissions_check_plugin_license);
+            button.attr("data-licence", cla_permissions_check_plugin_license);
         }
 
         /**
