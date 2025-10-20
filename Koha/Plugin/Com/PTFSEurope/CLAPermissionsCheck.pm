@@ -16,13 +16,13 @@ use HTTP::Request;
 use Mojo::JSON qw( decode_json );
 use C4::Templates;
 
-our $VERSION = "2.1.1";
+our $VERSION = "2.2.0";
 
 our $metadata = {
     name            => 'CLA Check Permissions',
     author          => 'Open Fifth',
     date_authored   => '2018-06-18',
-    date_updated    => "2025-09-03",
+    date_updated    => "2025-10-20",
     minimum_version => '24.11.00.000',
     maximum_version => undef,
     version         => $VERSION,
