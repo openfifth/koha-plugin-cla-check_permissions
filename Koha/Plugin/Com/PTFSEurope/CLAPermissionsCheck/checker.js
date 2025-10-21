@@ -43,13 +43,14 @@
             const button = $(selector).closest('li').find('.cla_check_permissions_button');
             if(check_input){
                 let selector_str = selector.substr(0, 1) === '#' || selector.substr(0, 1) === '.' ? selector.substr(1) : selector;
+                if(selector_str == 'eissn'){
+                    selector_str = 'issn';
+                }
                 button.attr("data-type", selector_str);
                 button.attr("data-identifier", $(selector).val());
             } else {
-                if(selector.toLowerCase().includes('issn')){
+                if(selector.toLowerCase().includes('issn') || selector.toLowerCase().includes('eissn')){
                     button.attr("data-type", "ISSN");
-                } else if(selector.toLowerCase().includes('eissn')){
-                    button.attr("data-type", "eISSN");
                 } else if(selector.toLowerCase().includes('isbn')){
                     button.attr("data-type", "ISBN");
                 }
